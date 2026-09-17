@@ -1,0 +1,56 @@
+<div class="auth-page">
+  <div class="auth-card">
+
+    <div class="auth-brand">
+      <div class="brand-icon">🎟️</div>
+      <h1>Ticket<span>Book</span></h1>
+      <p>Your journey starts here.</p>
+    </div>
+
+    <div class="auth-content">
+      <h2>Create your account</h2>
+
+      <p class="auth-description">
+        Sign up with your email and start booking tickets.
+      </p>
+
+      <% if @user.errors.any? %>
+        <div class="alert alert-error">
+          <span>⚠</span>
+
+          <div>
+            <% @user.errors.full_messages.each do |message| %>
+              <div><%= message %></div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
+      <%= form_with model: @user, url: signup_path, method: :post, class: "auth-form" do |form| %>
+        <div class="form-group">
+          <%= form.label :email, "Email address" %>
+
+          <div class="input-wrapper">
+            <span class="input-icon">✉</span>
+
+            <%= form.email_field :email, placeholder: "you@example.com", autocomplete: "email", required: true, autofocus: true %> </div>
+        </div>
+
+        <%= form.submit "Create account", class: "auth-button" %>
+
+      <% end %>
+
+      <div class="auth-divider">
+        <span>Already have an account?</span>
+      </div>
+
+      <%= link_to "Sign in", login_path, class: "secondary-button" %>
+    </div>
+
+    <div class="auth-footer">
+      <span>🚌</span>
+      Simple booking. Better journeys.
+    </div>
+
+  </div>
+</div>
