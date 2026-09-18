@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_18_012003) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_18_021745) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -38,6 +38,27 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_18_012003) do
     t.bigint "operator_id", null: false
     t.datetime "updated_at", null: false
     t.index ["operator_id"], name: "index_buses_on_operator_id"
+  end
+
+  create_table "hold_seats", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "hold_id", null: false
+    t.bigint "trip_seat_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["hold_id", "trip_seat_id"], name: "index_hold_seats_on_hold_id_and_trip_seat_id", unique: true
+    t.index ["hold_id"], name: "index_hold_seats_on_hold_id"
+    t.index ["trip_seat_id"], name: "index_hold_seats_on_trip_seat_id"
+  end
+
+  create_table "holds", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "expires_at", null: false
+    t.string "status", default: "active", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["expires_at"], name: "index_holds_on_expires_at"
+    t.index ["user_id"], name: "index_holds_on_user_id"
+    t.check_constraint "status::text = ANY (ARRAY['active'::character varying, 'expired'::character varying, 'converted'::character varying, 'cancelled'::character varying]::text[])", name: "holds_status_check"
   end
 
   create_table "operators", force: :cascade do |t|
@@ -98,6 +119,9 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_18_012003) do
   add_foreign_key "bus_amenities", "amenities"
   add_foreign_key "bus_amenities", "buses"
   add_foreign_key "buses", "operators"
+  add_foreign_key "hold_seats", "holds"
+  add_foreign_key "hold_seats", "trip_seats"
+  add_foreign_key "holds", "users"
   add_foreign_key "seats", "buses"
   add_foreign_key "trip_seats", "seats"
   add_foreign_key "trip_seats", "trips"

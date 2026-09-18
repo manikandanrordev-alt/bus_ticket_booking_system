@@ -8,6 +8,8 @@ class TripSeat < ApplicationRecord
     booked: "booked"
   }
 
+  has_many :hold_seats, dependent: :restrict_with_error
+
   validates :status, presence: true
   validates :seat_id, uniqueness: { scope: :trip_id }
 
