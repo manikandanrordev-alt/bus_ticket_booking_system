@@ -34,6 +34,8 @@ class BookingConfirmationService
 
       booking
     end
+  rescue ActiveRecord::RecordNotUnique
+    Booking.find_by!(idempotency_key: idempotency_key)
   end
 
   private

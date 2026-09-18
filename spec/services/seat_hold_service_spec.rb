@@ -181,5 +181,18 @@ RSpec.describe SeatHoldService do
       expect(Hold.count).to eq(0)
       expect(trip_seat_one.reload).to be_available
     end
+
+    it "rejects invalid seat ids" do
+      expect {
+        described_class.new(
+          user: user,
+          trip: trip,
+          trip_seat_ids: ["abc"]
+        ).call
+      }.to raise_error(
+        ArgumentError,
+        "Invalid seat selection"
+      )
+    end
   end
 end

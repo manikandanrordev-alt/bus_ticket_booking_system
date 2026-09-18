@@ -130,8 +130,10 @@
 
   <div class="booking-actions">
     <% if @booking.confirmed? %>
-      <%= button_to "Cancel Booking", cancel_booking_path(@booking), method: :post, class: "cancel-booking-button", data: {turbo_confirm: "Are you sure you want to cancel this booking?"} %>
-      <% end %>
+      <%= link_to "Reschedule Booking", reschedule_form_path(@booking), class: "reschedule-link" %>
+
+      <%= button_to "Cancel Booking", cancel_booking_path(@booking), method: :post, class: "cancel-booking-button", data: { turbo_confirm: "Are you sure you want to cancel this booking?" } %>
+    <% end %>
 
     <%= link_to "Search More Trips", search_trips_path, class: "back-search-button" %>
   </div>

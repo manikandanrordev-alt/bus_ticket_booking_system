@@ -775,3 +775,107 @@
   color: #007f3b;
   font-size: 20px;
 }
+
+.reschedule-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 20px 0 50px;
+}
+
+.reschedule-header {
+  margin-bottom: 25px;
+}
+
+.reschedule-header h1 {
+  margin: 0 0 8px;
+}
+
+.reschedule-header p:last-child {
+  color: #425563;
+}
+
+.current-trip-card,
+.reschedule-trip-card {
+  border: 1px solid #d8dde1;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.current-trip-card {
+  overflow: hidden;
+  margin-bottom: 30px;
+}
+
+.current-trip-card h2 {
+  margin: 0;
+  padding: 18px 22px;
+  border-bottom: 1px solid #d8dde1;
+  font-size: 18px;
+}
+
+.available-trips h2 {
+  margin-bottom: 15px;
+}
+
+.reschedule-trip-card {
+  display: grid;
+  grid-template-columns: 1.3fr 1.3fr 1.2fr 0.8fr auto;
+  gap: 20px;
+  align-items: center;
+  padding: 20px;
+  margin-bottom: 12px;
+}
+
+.reschedule-trip-card > div {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.reschedule-button {
+  padding: 10px 15px;
+  border: 2px solid #005eb8;
+  border-radius: 8px;
+  background: #005eb8;
+  color: #ffffff;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.reschedule-button:hover {
+  background: #004b93;
+  border-color: #004b93;
+}
+
+.reschedule-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 160px;
+  padding: 10px 16px;
+  border: 2px solid #005eb8;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #005eb8;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.reschedule-link:hover {
+  background: #f0f4f5;
+}
+
+@media (max-width: 750px) {
+  .reschedule-trip-card {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .reschedule-trip-card > div:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .reschedule-button {
+    width: 100%;
+  }
+}

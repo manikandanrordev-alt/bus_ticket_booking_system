@@ -1,0 +1,117 @@
+<div class="reschedule-page">
+  <div class="reschedule-header">
+    <p class="page-eyebrow">Booking Modification</p>
+
+    <h1>Reschedule Your Trip</h1>
+
+    <p>
+      Choose another trip for the same route and operator.
+    </p>
+  </div>
+
+  <div class="current-trip-card">
+    <h2>Current Trip</h2>
+
+    <div class="route-section">
+      <div>
+        <span class="detail-label">From</span>
+        <strong><%= @booking.trip.from_city %></strong>
+      </div>
+
+      <div class="route-arrow">→</div>
+
+      <div>
+        <span class="detail-label">To</span>
+        <strong><%= @booking.trip.to_city %></strong>
+      </div>
+    </div>
+
+    <div class="booking-details">
+      <div class="detail-item">
+        <span class="detail-label">Operator</span>
+        <strong><%= @booking.trip.operator.name %></strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Current Departure</span>
+        <strong>
+          <%= @booking.trip.departure_at.strftime("%d %b %Y, %I:%M %p") %>
+        </strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Seats</span>
+        <strong>
+          <%= @booking.booking_seats.map { |booking_seat|
+                booking_seat.trip_seat.seat.seat_number
+              }.join(", ") %>
+        </strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Current Amount</span>
+        <strong>₹<%= @booking.total_amount %></strong>
+      </div>
+    </div>
+  </div>
+
+  <div class="available-trips">
+    <h2>Available Trips</h2>
+
+    <% if @trips.any? %>
+      <% @trips.each do |trip| %>
+        <article class="reschedule-trip-card">
+          <div>
+            <span class="detail-label">Departure</span>
+            <strong>
+              <%= trip.departure_at.strftime("%d %b %Y, %I:%M %p") %>
+            </strong>
+          </div>
+
+          <div>
+            <span class="detail-label">Arrival</span>
+            <strong>
+              <%= trip.arrival_at.strftime("%d %b %Y, %I:%M %p") %>
+            </strong>
+          </div>
+
+          <div>
+            <span class="detail-label">Bus</span>
+            <strong>
+              <%= trip.bus.name %>
+              (<%= trip.bus.bus_type.humanize %>)
+            </strong>
+          </div>
+
+          <div>
+            <span class="detail-label">Price per seat</span>
+            <strong>₹<%= trip.price %></strong>
+          </div>
+
+          <div>
+            <%= button_to "Reschedule to This Trip",
+                  reschedule_booking_path(
+                    @booking,
+                    trip_id: trip.id
+                  ),
+                  method: :post,
+                  class: "reschedule-button",
+                  data: {
+                    turbo_confirm: "Reschedule your booking to this trip?"
+                  } %>
+          </div>
+        </article>
+      <% end %>
+    <% else %>
+      <div class="no-results">
+        No other trips are currently available for this route and operator.
+      </div>
+    <% end %>
+  </div>
+
+  <div class="reschedule-actions">
+    <%= link_to "Back to Booking",
+          booking_path(@booking),
+          class: "back-search-button" %>
+  </div>
+</div>

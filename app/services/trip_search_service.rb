@@ -6,17 +6,17 @@ class TripSearchService
   end
 
   def call
-    scope = Trip.includes(:operator, :bus, :trip_seats)
-
-    scope = filter_by_route(scope)
-    scope = filter_by_travel_date(scope)
-    scope = filter_by_operator_rating(scope)
-    scope = filter_by_price(scope)
-    scope = filter_by_bus_type(scope)
-    scope = filter_by_seat_type(scope)
-    scope = filter_by_amenities(scope)
-
-    scope
+    Rails.cache.fetch(cache_key, expires_in: 5.minutes) do
+      scope = Trip.includes(:operator, :bus, :trip_seats)
+      scope = filter_by_route(scope)
+      scope = filter_by_travel_date(scope)
+      scope = filter_by_operator_rating(scope)
+      scope = filter_by_price(scope)
+      scope = filter_by_bus_type(scope)
+      scope = filter_by_seat_type(scope)
+      scope = filter_by_amenities(scope)
+      scope.to_a
+    end
   end
 
   private
@@ -92,5 +92,14 @@ class TripSearchService
       .where(amenities: { name: requested_amenities })
       .group("trips.id")
       .having("COUNT(DISTINCT amenities.id) = ?", requested_amenities.size)
+  end
+
+  private
+
+  def cache_key
+    [
+      "trip-search",
+      params.to_h.sort.to_h
+    ]
   end
 end

@@ -17,4 +17,6 @@ Rails.application.routes.draw do
   post "/holds/:id/confirm", to: "holds#confirm", as: :confirm_hold
   get "/bookings/:id", to: "bookings#show", as: :booking
   post "/bookings/:id/cancel", to: "bookings#cancel", as: :cancel_booking
+  post "/bookings/:id/reschedule/:trip_id", to: "bookings#reschedule", as: :reschedule_booking
+  get "/bookings/:id/reschedule", to: "bookings#reschedule_form", as: :reschedule_form
 end

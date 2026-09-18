@@ -1,4 +1,8 @@
-# Clear existing domain data.
+# Clear existing data in dependency order
+BookingSeat.delete_all
+Booking.delete_all
+HoldSeat.delete_all
+Hold.delete_all
 TripSeat.delete_all
 Trip.delete_all
 BusAmenity.delete_all
@@ -139,6 +143,16 @@ create_trip_with_seats(
 )
 
 create_trip_with_seats(
+  operator: city_connect,
+  bus: city_connect_bus,
+  from_city: "Coimbatore",
+  to_city: "Chennai",
+  departure_at: today + 2.days + 22.hours,
+  arrival_at: today + 3.days + 6.hours,
+  price: 700
+)
+
+create_trip_with_seats(
   operator: southstar,
   bus: southstar_bus,
   from_city: "Coimbatore",
@@ -157,6 +171,8 @@ create_trip_with_seats(
   arrival_at: today + 4.days + 6.hours,
   price: 900
 )
+
+
 
 puts "Seed data created successfully."
 puts "Operators: #{Operator.count}"

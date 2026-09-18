@@ -6,7 +6,7 @@ class SeatHoldService
   def initialize(user:, trip:, trip_seat_ids:)
     @user = user
     @trip = trip
-    @trip_seat_ids = Array(trip_seat_ids).map(&:to_i).uniq
+    @trip_seat_ids = Array(trip_seat_ids)
   end
 
   def call
@@ -21,9 +21,9 @@ class SeatHoldService
 
       create_hold_seats!(hold, trip_seats)
 
-      ExpireHoldJob.set(wait_until: hold.expires_at).perform_later(hold.id)
-
       mark_seats_as_held!(trip_seats)
+
+      ExpireHoldJob.set(wait_until: hold.expires_at).perform_later(hold.id)
 
       hold
     end
@@ -36,9 +36,13 @@ class SeatHoldService
   def validate_request!
     raise ArgumentError, "At least one seat must be selected" if trip_seat_ids.empty?
 
-    return if trip_seat_ids.all? { |id| id.to_s.match?(/\A\d+\z/) }
+    unless trip_seat_ids.all? do |id|
+      id.to_s.match?(/\A\d+\z/) && id.to_i.positive?
+    end
+      raise ArgumentError, "Invalid seat selection"
+    end
 
-    raise ArgumentError, "Invalid seat selection"
+    @trip_seat_ids = trip_seat_ids.map(&:to_i).uniq
   end
 
   def lock_trip_seats!
