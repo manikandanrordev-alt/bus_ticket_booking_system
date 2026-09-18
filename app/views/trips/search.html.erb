@@ -1,0 +1,135 @@
+<div class="trips-page">
+  <h1>Search Bus Trips</h1>
+
+  <div class="search-card">
+    <%= form_with url: search_trips_path, method: :get, local: true do |form| %>
+
+      <div class="search-grid">
+        <div class="form-group">
+          <%= form.label :from_city, "From" %>
+          <%= form.text_field :from_city,
+                value: params[:from_city],
+                placeholder: "e.g. Coimbatore" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :to_city, "To" %>
+          <%= form.text_field :to_city,
+                value: params[:to_city],
+                placeholder: "e.g. Chennai" %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :travel_date, "Travel Date" %>
+          <%= form.date_field :travel_date,
+                value: params[:travel_date] %>
+        </div>
+      </div>
+
+      <div class="advanced-filters">
+        <h2>Advanced Filters</h2>
+
+        <div class="search-grid">
+          <!-- Keep your existing rating, price, bus type,
+               and seat type fields here -->
+        </div>
+
+        <div class="form-group">
+          <%= form.label :amenities, "Amenities" %>
+
+          <div class="amenities">
+            <% Amenity.order(:name).each do |amenity| %>
+              <label class="amenity-option">
+                <%= check_box_tag(
+                      "amenities[]",
+                      amenity.name,
+                      Array(params[:amenities]).include?(amenity.name)
+                    ) %>
+
+                <%= amenity.name %>
+              </label>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <div class="search-button">
+        <%= form.submit "Search Trips" %>
+      </div>
+    <% end %>
+  </div>
+
+  <% if params[:from_city].present? ||
+        params[:to_city].present? ||
+        params[:travel_date].present? %>
+
+    <div class="results-section">
+      <h2>Available Trips</h2>
+
+      <% if @trips&.any? %>
+        <% @trips.each do |trip| %>
+
+          <article class="trip-card">
+            <div class="trip-header">
+              <div class="trip-route">
+                <%= trip.from_city %> → <%= trip.to_city %>
+              </div>
+
+              <div class="trip-price">
+                ₹<%= trip.price %>
+              </div>
+            </div>
+
+            <div class="trip-details">
+              <div>
+                <div class="trip-detail-label">Operator</div>
+                <div class="trip-detail-value">
+                  <%= trip.operator.name %>
+                </div>
+              </div>
+
+              <div>
+                <div class="trip-detail-label">Rating</div>
+                <div class="trip-detail-value">
+                  ⭐ <%= trip.operator.rating %>
+                </div>
+              </div>
+
+              <div>
+                <div class="trip-detail-label">Bus</div>
+                <div class="trip-detail-value">
+                  <%= trip.bus.name %>
+                  (<%= trip.bus.bus_type.humanize %>)
+                </div>
+              </div>
+
+              <div>
+                <div class="trip-detail-label">Departure</div>
+                <div class="trip-detail-value">
+                  <%= trip.departure_at.strftime("%d %b %Y, %I:%M %p") %>
+                </div>
+              </div>
+
+              <div>
+                <div class="trip-detail-label">Arrival</div>
+                <div class="trip-detail-value">
+                  <%= trip.arrival_at.strftime("%d %b %Y, %I:%M %p") %>
+                </div>
+              </div>
+            </div>
+
+            <div class="amenity-list">
+              <strong>Amenities:</strong>
+              <%= trip.bus.amenities.pluck(:name).join(" · ") %>
+            </div>
+          </article>
+
+        <% end %>
+      <% else %>
+        <div class="no-results">
+          No trips found for the selected criteria.
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

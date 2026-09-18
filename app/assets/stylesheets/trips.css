@@ -1,0 +1,160 @@
+/* app/assets/stylesheets/trips.css */
+
+.trips-page {
+  max-width: 1100px;
+  margin: 40px auto;
+  padding: 0 20px;
+}
+
+.trips-page h1 {
+  margin-bottom: 30px;
+}
+
+.search-card {
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 25px;
+  margin-bottom: 30px;
+}
+
+.search-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+  font-size: 14px;
+  background: #fff;
+}
+
+.advanced-filters {
+  margin-top: 25px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+}
+
+.advanced-filters h2 {
+  font-size: 18px;
+  margin-bottom: 18px;
+}
+
+.amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-top: 10px;
+}
+
+.amenity-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.search-button {
+  margin-top: 25px;
+}
+
+.search-button input {
+  background: #1769aa;
+  color: white;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.search-button input:hover {
+  opacity: 0.9;
+}
+
+.results-section {
+  margin-top: 30px;
+}
+
+.trip-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 22px;
+  margin-bottom: 18px;
+}
+
+.trip-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.trip-route {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.trip-price {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.trip-details {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.trip-detail-label {
+  color: #666;
+  font-size: 13px;
+  margin-bottom: 4px;
+}
+
+.trip-detail-value {
+  font-weight: 600;
+}
+
+.amenity-list {
+  margin-top: 15px;
+  color: #555;
+}
+
+.no-results {
+  padding: 25px;
+  text-align: center;
+  background: #f7f7f7;
+  border-radius: 10px;
+}
+
+@media (max-width: 768px) {
+  .search-grid,
+  .trip-details {
+    grid-template-columns: 1fr;
+  }
+
+  .trip-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
