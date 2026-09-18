@@ -1,0 +1,101 @@
+<div class="hold-page">
+  <div class="hold-header">
+    <div>
+      <p class="page-eyebrow">Seat Reservation</p>
+      <h1>Seats Held Successfully</h1>
+      <p class="hold-subtitle">
+        Your selected seats are temporarily reserved.
+      </p>
+    </div>
+
+    <div class="hold-status">
+      <span class="status-dot"></span>
+      Held
+    </div>
+  </div>
+
+  <% trip = @hold.trip_seats.first.trip %>
+  <% selected_seats = @hold.hold_seats.map { |hold_seat| hold_seat.trip_seat.seat.seat_number } %>
+  <% seat_count = selected_seats.length %>
+  <% total_amount = seat_count * trip.price %>
+
+  <div class="hold-card">
+    <div class="route-section">
+      <div>
+        <span class="detail-label">From</span>
+        <strong><%= trip.from_city %></strong>
+      </div>
+
+      <div class="route-arrow">→</div>
+
+      <div>
+        <span class="detail-label">To</span>
+        <strong><%= trip.to_city %></strong>
+      </div>
+    </div>
+
+    <div class="hold-details">
+      <div class="detail-item">
+        <span class="detail-label">Operator</span>
+        <strong><%= trip.operator.name %></strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Bus</span>
+        <strong>
+          <%= trip.bus.name %>
+          (<%= trip.bus.bus_type.humanize %>)
+        </strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Departure</span>
+        <strong>
+          <%= trip.departure_at.strftime("%d %b %Y, %I:%M %p") %>
+        </strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Seats</span>
+        <strong><%= selected_seats.join(", ") %></strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Price per seat</span>
+        <strong>₹<%= trip.price %></strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Number of seats</span>
+        <strong><%= seat_count %></strong>
+      </div>
+    </div>
+
+    <div class="hold-total">
+      <span>Total Amount</span>
+      <strong>₹<%= total_amount %></strong>
+    </div>
+  </div>
+
+  <div class="expiry-card">
+    <div>
+      <strong>⏱ Your seats are reserved for 5 minutes</strong>
+      <p>
+        Complete your booking before
+        <strong>
+          <%= @hold.expires_at.strftime("%I:%M:%S %p") %>
+        </strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="hold-actions">
+    <%= form_with url: confirm_hold_path(@hold), method: :post, local: true do |form| %>
+      <%= hidden_field_tag :idempotency_key, "booking-hold-#{@hold.id}" %>
+
+      <%= form.submit "Confirm Booking", class: "confirm-booking-button" %>
+    <% end %>
+
+    <%= link_to "Back to Search", search_trips_path, class: "back-search-button" %>
+  </div>
+</div>

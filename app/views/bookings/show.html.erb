@@ -1,0 +1,139 @@
+<div class="booking-page">
+  <% if @booking.confirmed? %>
+    <div class="booking-success">
+      <div class="success-icon">✓</div>
+
+      <div>
+        <p class="page-eyebrow">Booking Confirmed</p>
+
+        <h1>Your ticket is confirmed</h1>
+
+        <p>
+          Your bus booking has been successfully confirmed.
+        </p>
+      </div>
+    </div>
+  <% elsif @booking.cancelled? %>
+    <div class="booking-cancelled">
+      <div class="cancelled-icon">×</div>
+
+      <div>
+        <p class="page-eyebrow">Booking Cancelled</p>
+
+        <h1>Your booking has been cancelled</h1>
+
+        <p>
+          Your booking was cancelled successfully.
+        </p>
+      </div>
+    </div>
+  <% end %>
+  <% if @booking.cancelled? %>
+    <div class="refund-card">
+      <div>
+        <strong>Booking Cancelled Successfully</strong>
+        <p>Your booking has been cancelled.</p>
+      </div>
+
+      <div class="refund-details">
+        <div>
+          <span>Ticket Amount</span>
+          <strong>₹<%= @booking.total_amount %></strong>
+        </div>
+
+        <div>
+          <span>Cancellation Fee</span>
+          <strong>₹50</strong>
+        </div>
+
+        <div class="refund-total">
+          <span>Refund Amount</span>
+          <strong>₹<%= [@booking.total_amount - 50, 0].max %></strong>
+        </div>
+      </div>
+    </div>
+  <% end %>
+  <div class="booking-card">
+    <div class="booking-card-header">
+      <div>
+        <span class="detail-label">Booking ID</span>
+        <strong>#<%= @booking.id %></strong>
+      </div>
+
+      <span class="booking-status <%= @booking.status %>">
+        <%= @booking.status.humanize %>
+      </span>
+    </div>
+
+    <div class="route-section">
+      <div>
+        <span class="detail-label">From</span>
+        <strong><%= @booking.trip.from_city %></strong>
+      </div>
+
+      <div class="route-arrow">→</div>
+
+      <div>
+        <span class="detail-label">To</span>
+        <strong><%= @booking.trip.to_city %></strong>
+      </div>
+    </div>
+
+    <div class="booking-details">
+      <div class="detail-item">
+        <span class="detail-label">Operator</span>
+        <strong><%= @booking.trip.operator.name %></strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Bus</span>
+        <strong>
+          <%= @booking.trip.bus.name %>
+          (<%= @booking.trip.bus.bus_type.humanize %>)
+        </strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Departure</span>
+        <strong>
+          <%= @booking.trip.departure_at.strftime("%d %b %Y, %I:%M %p") %>
+        </strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Arrival</span>
+        <strong>
+          <%= @booking.trip.arrival_at.strftime("%d %b %Y, %I:%M %p") %>
+        </strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Seats</span>
+        <strong>
+          <%= @booking.booking_seats.map { |booking_seat|
+                booking_seat.trip_seat.seat.seat_number
+              }.join(", ") %>
+        </strong>
+      </div>
+
+      <div class="detail-item">
+        <span class="detail-label">Passenger Email</span>
+        <strong><%= @booking.user.email %></strong>
+      </div>
+    </div>
+
+    <div class="booking-total">
+      <span>Total Paid</span>
+      <strong>₹<%= @booking.total_amount %></strong>
+    </div>
+  </div>
+
+  <div class="booking-actions">
+    <% if @booking.confirmed? %>
+      <%= button_to "Cancel Booking", cancel_booking_path(@booking), method: :post, class: "cancel-booking-button", data: {turbo_confirm: "Are you sure you want to cancel this booking?"} %>
+      <% end %>
+
+    <%= link_to "Search More Trips", search_trips_path, class: "back-search-button" %>
+  </div>
+</div>
+
