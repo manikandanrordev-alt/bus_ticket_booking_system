@@ -5,6 +5,7 @@ class Hold < ApplicationRecord
 
   has_many :hold_seats, dependent: :destroy
   has_many :trip_seats, through: :hold_seats
+  has_one :booking, dependent: :restrict_with_error
 
   enum :status, {
     active: "active",

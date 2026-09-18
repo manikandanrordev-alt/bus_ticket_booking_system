@@ -1,6 +1,13 @@
 <div class="trips-page">
   <h1>Search Bus Trips</h1>
+  <div class="user-actions">
+    <span class="user-profile">
+      <span class="profile-icon">👤</span>
+      <%= current_user.email %>
+    </span>
 
+    <%= button_to "Logout", logout_path, method: :delete, class: "logout-button" %>
+    </div>
   <div class="search-card">
     <%= form_with url: search_trips_path, method: :get, local: true do |form| %>
 
@@ -121,6 +128,12 @@
             <div class="amenity-list">
               <strong>Amenities:</strong>
               <%= trip.bus.amenities.pluck(:name).join(" · ") %>
+            </div>
+
+            <div class="trip-actions">
+              <%= link_to "Select Seats",
+                    trip_seats_path(trip),
+                    class: "select-seats-button" %>
             </div>
           </article>
 

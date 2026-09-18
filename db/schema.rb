@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_18_021745) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_18_143850) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -19,6 +19,35 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_18_021745) do
     t.string "name", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_amenities_on_name", unique: true
+  end
+
+  create_table "booking_seats", force: :cascade do |t|
+    t.bigint "booking_id", null: false
+    t.datetime "created_at", null: false
+    t.decimal "price", precision: 10, scale: 2, null: false
+    t.bigint "trip_seat_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["booking_id", "trip_seat_id"], name: "index_booking_seats_on_booking_id_and_trip_seat_id", unique: true
+    t.index ["booking_id"], name: "index_booking_seats_on_booking_id"
+    t.index ["trip_seat_id"], name: "index_booking_seats_on_trip_seat_id"
+    t.check_constraint "price >= 0::numeric", name: "booking_seats_price_check"
+  end
+
+  create_table "bookings", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.bigint "hold_id", null: false
+    t.string "idempotency_key", null: false
+    t.string "status", default: "confirmed", null: false
+    t.decimal "total_amount", precision: 10, scale: 2, null: false
+    t.bigint "trip_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["hold_id"], name: "index_bookings_on_hold_id"
+    t.index ["idempotency_key"], name: "index_bookings_on_idempotency_key", unique: true
+    t.index ["trip_id"], name: "index_bookings_on_trip_id"
+    t.index ["user_id"], name: "index_bookings_on_user_id"
+    t.check_constraint "status::text = ANY (ARRAY['confirmed'::character varying, 'cancelled'::character varying, 'rescheduled'::character varying]::text[])", name: "bookings_status_check"
+    t.check_constraint "total_amount >= 0::numeric", name: "bookings_total_amount_check"
   end
 
   create_table "bus_amenities", force: :cascade do |t|
@@ -116,6 +145,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_18_021745) do
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
+  add_foreign_key "booking_seats", "bookings"
+  add_foreign_key "booking_seats", "trip_seats"
+  add_foreign_key "bookings", "holds"
+  add_foreign_key "bookings", "trips"
+  add_foreign_key "bookings", "users"
   add_foreign_key "bus_amenities", "amenities"
   add_foreign_key "bus_amenities", "buses"
   add_foreign_key "buses", "operators"

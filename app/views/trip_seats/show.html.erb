@@ -1,0 +1,67 @@
+<div class="seat-selection-page">
+  <h1>Select Seats</h1>
+
+  <div class="trip-summary">
+    <h2>
+      <%= @trip.from_city %> → <%= @trip.to_city %>
+    </h2>
+
+    <p>
+      <strong>Operator:</strong>
+      <%= @trip.operator.name %>
+    </p>
+
+    <p>
+      <strong>Bus:</strong>
+      <%= @trip.bus.name %>
+      (<%= @trip.bus.bus_type.humanize %>)
+    </p>
+
+    <p>
+      <strong>Departure:</strong>
+      <%= @trip.departure_at.strftime("%d %b %Y, %I:%M %p") %>
+    </p>
+
+    <p>
+      <strong>Price per seat:</strong>
+      ₹<%= @trip.price %>
+    </p>
+  </div>
+
+  <%= form_with url: trip_holds_path(@trip), method: :post do |form| %>
+    <div class="seat-grid">
+      <% @trip_seats.each do |trip_seat| %>
+        <label class="seat <%= trip_seat.status %>">
+          <%= check_box_tag(
+            "trip_seat_ids[]",
+            trip_seat.id,
+            false,
+            disabled: !trip_seat.available?
+          ) %>
+
+          <span>
+            <%= trip_seat.seat.seat_number %>
+          </span>
+        </label>
+      <% end %>
+    </div>
+
+    <div class="selection-summary">
+      <p>
+        Selected seats:
+        <strong id="selected-seat-count">0</strong>
+      </p>
+
+      <p>
+        Total:
+        <strong id="selected-total">₹0</strong>
+      </p>
+
+      <%= form.submit(
+        "Hold Selected Seats",
+        id: "hold-seats-button",
+        disabled: true
+      ) %>
+    </div>
+  <% end %>
+</div>

@@ -10,7 +10,7 @@ RSpec.describe "User sessions", type: :request do
           email: "mani@example.com"
         }
 
-        expect(response).to redirect_to(root_path)
+        expect(response).to redirect_to(search_trips_path)
         expect(session[:user_id]).to eq(user.id)
       end
     end

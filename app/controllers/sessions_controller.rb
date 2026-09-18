@@ -9,7 +9,7 @@ class SessionsController < ApplicationController
     if user
       sign_in(user)
 
-      redirect_to root_path, notice: "Welcome back."
+      redirect_to search_trips_path, notice: "Signed in successfully."
     else
       flash.now[:alert] = "No account found with that email."
       render :new, status: :unprocessable_content

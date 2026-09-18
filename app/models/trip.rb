@@ -4,6 +4,7 @@ class Trip < ApplicationRecord
 
   has_many :trip_seats, dependent: :destroy
   has_many :seats, through: :trip_seats
+  has_many :bookings, dependent: :restrict_with_error
 
   validates :from_city, :to_city, presence: true
   validates :departure_at, :arrival_at, :price, presence: true
