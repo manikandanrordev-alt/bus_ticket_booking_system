@@ -61,3 +61,22 @@ Refund calculation:
 
 ```text
 Refund = Ticket Amount - ₹50 cancellation fee
+```
+
+## Technical Architecture & Requirements
+
+### Concurrency & Locking
+The system relies on PostgreSQL's pessimistic locking (`FOR UPDATE`) for concurrency control during seat holding and booking confirmation. This ensures that no two users can acquire a hold on the same seat simultaneously (no overselling), satisfying the strict single-user-per-seat-hold requirement.
+
+### Background Jobs
+ActiveJob (with Solid Queue configured for production) is utilized to automatically release seats if a hold is not confirmed within the 5-minute window (`ExpireHoldJob`).
+
+### Architecture (Service Objects)
+All complex business logic is strictly encapsulated within dedicated Service Objects (`app/services/`), such as `BookingConfirmationService`, `BookingCancellationService`, and `SeatHoldService`. This prevents fat models/controllers and makes the system modular.
+
+### Performance & Cache Invalidation
+Trip search results are heavily cached using `Rails.cache`. 
+To ensure data accuracy, the cache key automatically includes `TripSeat.maximum(:updated_at)`. This means that whenever *any* seat is held, booked, or released, the cache is instantly and explicitly busted, ensuring users always see real-time seat availability.
+
+### Testing
+Critical business paths are thoroughly covered using RSpec. This includes explicit testing for seat hold creation, the 5-minute expiry logic, double-booking prevention, and the cancellation fee calculations.

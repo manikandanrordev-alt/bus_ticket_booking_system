@@ -99,6 +99,7 @@ class TripSearchService
   def cache_key
     [
       "trip-search",
+      TripSeat.maximum(:updated_at).to_i,
       params.to_h.sort.to_h
     ]
   end
