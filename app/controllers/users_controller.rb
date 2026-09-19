@@ -9,9 +9,7 @@ class UsersController < ApplicationController
     user = User.new(user_params)
 
     if user.save
-      sign_in(user)
-
-      redirect_to root_path, notice: "Account created successfully."
+      redirect_to login_path, notice: "Account created successfully. Please log in."
     else
       @user = user
 
@@ -22,6 +20,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.require(:user).permit(:email)
+    params.require(:user).permit(:email, :phone_number)
   end
 end

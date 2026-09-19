@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   normalizes :email, with: ->(email) { email.strip.downcase }
 
@@ -5,4 +7,5 @@ class User < ApplicationRecord
   has_many :bookings, dependent: :restrict_with_error
 
   validates :email, presence: true, uniqueness: true
+  validates :phone_number, presence: true
 end

@@ -72,3 +72,5 @@ end
 
 
 gem "json", "= 2.21.2"
+
+gem "letter_opener_web", "~> 3.0", group: :development

@@ -1,0 +1,28 @@
+BOOKING RESCHEDULED
+===================
+
+Hello <%= @booking.user.email %>,
+
+Your booking has been successfully rescheduled.
+
+Booking ID: #<%= @booking.id %>
+
+Route:
+<%= @booking.trip.from_city %> → <%= @booking.trip.to_city %>
+
+Operator:
+<%= @booking.trip.operator.name %>
+
+Bus:
+<%= @booking.trip.bus.name %>
+
+New Departure:
+<%= @booking.trip.departure_at.strftime("%d %b %Y, %I:%M %p") %>
+
+Seats:
+<%= @booking.booking_seats.map { |booking_seat|
+  booking_seat.trip_seat.seat.seat_number
+}.join(", ") %>
+
+Updated Amount:
+₹<%= @booking.total_amount %>

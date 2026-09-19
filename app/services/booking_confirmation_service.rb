@@ -10,7 +10,7 @@ class BookingConfirmationService
     existing_booking = Booking.find_by(idempotency_key: idempotency_key)
     return existing_booking if existing_booking
 
-    ActiveRecord::Base.transaction do
+    booking = ActiveRecord::Base.transaction do
       hold = Hold.lock.find(@hold.id)
 
       existing_booking = Booking.find_by(idempotency_key: idempotency_key)
@@ -34,6 +34,13 @@ class BookingConfirmationService
 
       booking
     end
+
+    SendBookingNotificationJob.perform_later(
+      booking.id,
+      "confirmation"
+    )
+
+    booking
   rescue ActiveRecord::RecordNotUnique
     Booking.find_by!(idempotency_key: idempotency_key)
   end

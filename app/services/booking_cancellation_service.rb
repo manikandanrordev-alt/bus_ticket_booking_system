@@ -8,26 +8,31 @@ class BookingCancellationService
   end
 
   def call
-    ActiveRecord::Base.transaction do
+    result = ActiveRecord::Base.transaction do
       booking = Booking.lock.find(@booking.id)
 
       validate_booking!(booking)
-
       validate_cancellation_window!(booking)
 
       refund_amount = calculate_refund(booking)
 
       release_seats!(booking)
 
-      booking.update!(
-        status: "cancelled"
-      )
+      booking.update!(status: "cancelled")
 
       {
         booking: booking,
         refund_amount: refund_amount
       }
     end
+
+    # Send notification only after the cancellation transaction commits.
+    SendBookingNotificationJob.perform_later(
+      result[:booking].id,
+      "cancellation"
+    )
+
+    result
   end
 
   private
@@ -35,15 +40,16 @@ class BookingCancellationService
   attr_reader :booking
 
   def validate_booking!(booking)
-    return if booking.confirmed?
-
-    raise ArgumentError, "Booking is no longer active"
+    unless booking.confirmed?
+      raise ArgumentError, "Only confirmed bookings can be cancelled"
+    end
   end
 
   def validate_cancellation_window!(booking)
-    if booking.trip.departure_at <= 1.hour.from_now
-      raise ArgumentError,
-        "Booking can only be cancelled at least 1 hour before departure"
+    departure_at = booking.trip.departure_at
+
+    if departure_at <= 1.hour.from_now
+      raise ArgumentError, "Booking can only be cancelled at least 1 hour before departure"
     end
   end
 
@@ -56,8 +62,6 @@ class BookingCancellationService
 
     TripSeat
       .where(id: trip_seat_ids)
-      .order(:id)
-      .lock
       .update_all(status: "available")
   end
 end

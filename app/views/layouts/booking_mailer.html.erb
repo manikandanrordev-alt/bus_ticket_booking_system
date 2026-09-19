@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0"
+    >
+
+    <title><%= message.subject %></title>
+  </head>
+
+  <body style="
+    margin: 0;
+    padding: 0;
+    background-color: #f4f6f8;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #212b36;
+  ">
+
+    <table
+      width="100%"
+      cellpadding="0"
+      cellspacing="0"
+      border="0"
+      style="background-color: #f4f6f8; padding: 32px 16px;"
+    >
+      <tr>
+        <td align="center">
+
+          <table
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            style="
+              max-width: 620px;
+              background-color: #ffffff;
+              border-radius: 10px;
+              overflow: hidden;
+              box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            "
+          >
+
+            <!-- Header -->
+            <tr>
+              <td style="
+                background-color: #005eb8;
+                padding: 24px 32px;
+                text-align: center;
+              ">
+                <div style="
+                  color: #ffffff;
+                  font-size: 22px;
+                  font-weight: bold;
+                  letter-spacing: 0.3px;
+                ">
+                  Bus Ticket Booking
+                </div>
+
+                <div style="
+                  color: #d8ecff;
+                  font-size: 13px;
+                  margin-top: 6px;
+                ">
+                  Booking Notification
+                </div>
+              </td>
+            </tr>
+
+            <!-- Content -->
+            <tr>
+              <td style="
+                padding: 32px;
+              ">
+                <%= yield %>
+              </td>
+            </tr>
+
+            <!-- Footer -->
+            <tr>
+              <td style="
+                border-top: 1px solid #e5e7eb;
+                padding: 20px 32px;
+                text-align: center;
+                color: #637381;
+                font-size: 12px;
+                line-height: 18px;
+              ">
+                This is an automated notification from
+                Bus Ticket Booking.
+
+                <br>
+
+                Please do not reply to this email.
+              </td>
+            </tr>
+
+          </table>
+
+        </td>
+      </tr>
+    </table>
+
+  </body>
+</html>

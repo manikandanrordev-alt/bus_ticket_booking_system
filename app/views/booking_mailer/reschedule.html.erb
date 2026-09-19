@@ -1,0 +1,59 @@
+<h1 style="
+  margin: 0 0 8px;
+  color: #005eb8;
+  font-size: 26px;
+">
+  Booking Rescheduled
+</h1>
+
+<p style="
+  margin: 0 0 24px;
+  color: #52606d;
+  font-size: 15px;
+  line-height: 24px;
+">
+  Hello <strong><%= @booking.user.email %></strong>,
+</p>
+
+<p style="
+  margin: 0 0 24px;
+  color: #52606d;
+  font-size: 15px;
+  line-height: 24px;
+">
+  Your booking has been successfully rescheduled.
+  The details below reflect your updated trip.
+</p>
+
+<%= render "booking_details" %>
+
+<table
+  width="100%"
+  cellpadding="0"
+  cellspacing="0"
+  border="0"
+  style="margin-top: 20px;"
+>
+  <tr>
+    <td style="
+      padding: 16px;
+      background-color: #eef6ff;
+      border-radius: 8px;
+    ">
+      <span style="
+        color: #005eb8;
+        font-weight: bold;
+      ">
+        Updated Amount:
+      </span>
+
+      <span style="
+        color: #005eb8;
+        font-weight: bold;
+        float: right;
+      ">
+        ₹<%= @booking.total_amount %>
+      </span>
+    </td>
+  </tr>
+</table>

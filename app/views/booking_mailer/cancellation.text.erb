@@ -1,0 +1,23 @@
+BOOKING CANCELLED
+=================
+
+Hello <%= @booking.user.email %>,
+
+Your booking has been cancelled successfully.
+
+Booking ID: #<%= @booking.id %>
+
+Route:
+<%= @booking.trip.from_city %> → <%= @booking.trip.to_city %>
+
+Departure:
+<%= @booking.trip.departure_at.strftime("%d %b %Y, %I:%M %p") %>
+
+Ticket Amount:
+₹<%= @ticket_amount %>
+
+Cancellation Fee:
+₹<%= @cancellation_fee %>
+
+Refund Amount:
+₹<%= @refund_amount %>
