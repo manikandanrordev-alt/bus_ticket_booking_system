@@ -71,6 +71,6 @@ group :test do
 end
 
 
-gem "json", "= 2.21.2"
+gem "json", "3.1.0"
 
 gem "letter_opener_web", "~> 3.0", group: :development
